@@ -1,0 +1,4 @@
+ALTER TABLE users
+    ALTER COLUMN  username SET NOT NULL,
+    ALTER COLUMN password SET NOT NULL,
+    ALTER COLUMN role SET NOT NULL;
