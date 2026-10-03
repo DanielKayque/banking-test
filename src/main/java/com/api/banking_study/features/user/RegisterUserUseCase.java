@@ -1,8 +1,8 @@
 package com.api.banking_study.features.user;
 
 import com.api.banking_study.entities.UserEntity;
+import com.api.banking_study.exceptions.UserAlreadyRegisteredException;
 import com.api.banking_study.repository.UserRepository;
-import com.api.banking_study.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,9 +12,6 @@ import java.util.UUID;
 @Service
 public class RegisterUserUseCase {
     @Autowired
-    private TokenService tokenService;
-
-    @Autowired
     private UserRepository repository;
 
     @Autowired
@@ -22,7 +19,11 @@ public class RegisterUserUseCase {
 
     public UserResponseDTO execute(UserDto dto) {
         if (repository.findByEmail(dto.email()) != null){
-            throw new RuntimeException("Email already registered");
+            throw new UserAlreadyRegisteredException("email");
+        }
+
+        if (repository.existsByDocument(dto.document())) {
+            throw new UserAlreadyRegisteredException("document");
         }
 
         String passwordHash = passwordEncoder.encode(dto.password());
