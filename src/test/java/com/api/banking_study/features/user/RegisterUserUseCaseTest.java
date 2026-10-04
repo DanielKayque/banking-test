@@ -1,7 +1,6 @@
 package com.api.banking_study.features.user;
 
 import com.api.banking_study.entities.UserEntity;
-import com.api.banking_study.exceptions.UserAlreadyRegisteredException;
 import com.api.banking_study.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,13 +28,13 @@ public class RegisterUserUseCaseTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    private UserDto userDto;
+    private RegisterUserDto userDto;
 
     private UserEntity savedUser;
 
     @BeforeEach
     void setUp(){
-        userDto = new UserDto("daniel", "daanielkayque@gmail.com", "123", "123123132123");
+        userDto = new RegisterUserDto("daniel", "daanielkayque@gmail.com", "123", "123123132123");
 
         savedUser = new UserEntity(UUID.randomUUID() ,"daniel", "daanielkayque@gmail.com", "123", "123123132123", "ADMIN");
 
