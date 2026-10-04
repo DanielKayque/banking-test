@@ -24,7 +24,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("auth-login")
                     .withSubject(entity.getEmail())
-                    .withExpiresAt(LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.ofHours(-3)))
+                    .withExpiresAt(getExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Failed to create token");
@@ -43,5 +43,9 @@ public class TokenService {
         } catch (JWTVerificationException ex) {
             throw new JWTVerificationException("Invalid token");
         }
+    }
+
+    public Instant getExpirationDate(){
+        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.ofHours(-3));
     }
 }
