@@ -1,5 +1,6 @@
 package com.api.banking_study.exceptions;
 
+import com.api.banking_study.features.user.UserAlreadyRegisteredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

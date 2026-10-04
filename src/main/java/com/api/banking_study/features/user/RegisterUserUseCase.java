@@ -1,7 +1,6 @@
 package com.api.banking_study.features.user;
 
 import com.api.banking_study.entities.UserEntity;
-import com.api.banking_study.exceptions.UserAlreadyRegisteredException;
 import com.api.banking_study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,7 @@ public class RegisterUserUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserResponseDTO execute(UserDto dto) {
+    public UserResponseDTO execute(RegisterUserDto dto) {
         if (repository.findByEmail(dto.email()) != null){
             throw new UserAlreadyRegisteredException("email");
         }
@@ -37,11 +36,9 @@ public class RegisterUserUseCase {
 
         UserEntity result = repository.save(entity);
 
-        UserResponseDTO response = new UserResponseDTO(
+        return new UserResponseDTO(
                 result.getUsername(), result.getEmail(), result.getDocument(), result.getRole()
         );
-
-        return response;
     }
 
 }
