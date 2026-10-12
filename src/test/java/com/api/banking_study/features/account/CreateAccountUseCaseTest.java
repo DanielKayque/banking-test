@@ -38,6 +38,7 @@ public class CreateAccountUseCaseTest {
     @BeforeEach
     void setUp(){
         documentAlreadyExists = "123123123123";
+        documentNotExists = "123123123124";
 
         userEntity = new UserEntity(
                 UUID.randomUUID(),
