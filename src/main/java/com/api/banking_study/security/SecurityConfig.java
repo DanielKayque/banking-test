@@ -21,6 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http){
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(autorize -> autorize
+                        .requestMatchers("/swagger-ui/**","/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/account").authenticated()
                         .anyRequest().authenticated())
