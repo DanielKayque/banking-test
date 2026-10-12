@@ -22,7 +22,7 @@ public class AccountEntity {
     @Column(name = "amount_cent", nullable = false)
     private Long amountCent;
 
-    public AccountEntity(UUID id, UserEntity user, Long amountCent) {
+    public AccountEntity(UUID id, UserEntity user) {
         this.id = id;
         this.user = user;
         this.amountCent = 0L;
