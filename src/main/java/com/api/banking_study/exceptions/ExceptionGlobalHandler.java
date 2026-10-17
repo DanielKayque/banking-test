@@ -1,6 +1,7 @@
 package com.api.banking_study.exceptions;
 
 import com.api.banking_study.features.account.AccountAlreadyExistsException;
+import com.api.banking_study.features.account.AccountNotFoundException;
 import com.api.banking_study.features.user.UserAlreadyRegisteredException;
 import com.api.banking_study.features.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,10 @@ public class ExceptionGlobalHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponseDTO> handleBadCredentialsException(BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO("Usuário ou senha inválidos.", HttpStatus.UNAUTHORIZED.value()));
+    }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccountNotFound(AccountNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
 }

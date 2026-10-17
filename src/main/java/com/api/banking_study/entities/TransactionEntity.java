@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class TransactionsEntity {
+public class TransactionEntity {
 
     @Id
     private UUID id;

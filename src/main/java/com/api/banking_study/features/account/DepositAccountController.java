@@ -40,7 +40,7 @@ public class DepositAccountController {
                                                       @Parameter(description = "Valor a ser depositado")
                                                       @RequestBody @Valid DepositRequestDto dto){
 
-        BigDecimal amount = useCase.execute(user.getId(), dto.amount());
+        BigDecimal amount = useCase.execute(user.getId(), dto.amount(), dto.description());
 
         AccountResponseDto responseDto = new AccountResponseDto(user.getUsername(), user.getEmail(), amount);
 
