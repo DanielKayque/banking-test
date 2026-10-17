@@ -10,10 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/transactions")
+@Validated
 @Tag(name = "Transações", description = "Log de transações da conta.")
 @SecurityRequirement(name = "bearerAuth")
 @ApiResponses({
@@ -57,9 +61,11 @@ public class ListTransactionsController {
     public ResponseEntity<PagedResponseDto<ListTransactionsResponseDto>> list(
             @AuthenticationPrincipal UserEntity user,
             @Parameter(description = "Número da página, começando em 0", example = "0")
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "0")
+            @PositiveOrZero int page,
             @Parameter(description = "Quantidade de transações por página", example = "10")
-            @RequestParam(defaultValue = "10") int size){
+            @RequestParam(defaultValue = "10")
+            @PositiveOrZero int size){
 
         Page<ListTransactionsResponseDto> result = useCase.execute(page, size, user.getId());
 

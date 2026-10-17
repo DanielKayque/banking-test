@@ -4,6 +4,7 @@ import com.api.banking_study.features.account.AccountAlreadyExistsException;
 import com.api.banking_study.features.account.AccountNotFoundException;
 import com.api.banking_study.features.user.UserAlreadyRegisteredException;
 import com.api.banking_study.features.user.UserNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -48,6 +49,11 @@ public class ExceptionGlobalHandler {
 
     @ExceptionHandler(AccountNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleAccountNotFound(AccountNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccountNotFound(ConstraintViolationException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponseDTO(ex.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
 }
