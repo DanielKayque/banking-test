@@ -1,6 +1,7 @@
 package com.api.banking_study.features.account;
 
 import com.api.banking_study.entities.UserEntity;
+import com.api.banking_study.exceptions.AuthenticatedUserRequiredException;
 import com.api.banking_study.exceptions.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,12 +31,12 @@ public class CreateAccountController {
     @Operation(summary = "Criar conta", description = "Crie a sua conta")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Conta criada com sucesso"),
-            @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
+            @ApiResponse(responseCode = "401", description = "Token ausente ou inválido", content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
             @ApiResponse(responseCode = "409", description = "Usuário já possui uma conta", content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     public ResponseEntity<AccountResponseDto> createAccount(@AuthenticationPrincipal UserEntity user){
         if (user == null) {
-            throw new IllegalArgumentException("Authenticated user is required");
+            throw new AuthenticatedUserRequiredException("Authenticated user is required");
         }
 
         AccountResponseDto result = usecase.execute(user);

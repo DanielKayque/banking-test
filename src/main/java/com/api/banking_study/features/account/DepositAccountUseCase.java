@@ -26,7 +26,7 @@ public class DepositAccountUseCase {
 
         Long amountCents = amount.movePointRight(2).longValueExact();
 
-        AccountEntity entity = repository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("Account not found"));
+        AccountEntity entity = repository.findByUserId(userId).orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
         entity.deposit(amountCents);
 

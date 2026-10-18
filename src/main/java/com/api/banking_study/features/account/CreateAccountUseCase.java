@@ -2,6 +2,7 @@ package com.api.banking_study.features.account;
 
 import com.api.banking_study.entities.AccountEntity;
 import com.api.banking_study.entities.UserEntity;
+import com.api.banking_study.exceptions.AuthenticatedUserRequiredException;
 import com.api.banking_study.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class CreateAccountUseCase {
     @Transactional
     public AccountResponseDto execute(UserEntity user){
         if (user == null) {
-            throw new IllegalArgumentException("Authenticated user is required");
+            throw new AuthenticatedUserRequiredException("Authenticated user is required");
         }
 
         if (accountRepository.existsByUserId(user.getId())){

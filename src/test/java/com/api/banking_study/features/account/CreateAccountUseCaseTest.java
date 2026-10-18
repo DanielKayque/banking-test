@@ -3,6 +3,7 @@ package com.api.banking_study.features.account;
 import com.api.banking_study.entities.AccountEntity;
 import com.api.banking_study.entities.UserEntity;
 import com.api.banking_study.repository.AccountRepository;
+import com.api.banking_study.exceptions.AuthenticatedUserRequiredException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,8 +50,8 @@ public class CreateAccountUseCaseTest {
     }
 
     @Test
-    public void shouldThrowIllegalArgumentExceptionWhenUserIsNull(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> useCase.execute(null));
+    public void shouldThrowAuthenticatedUserRequiredExceptionWhenUserIsNull(){
+        Assertions.assertThrows(AuthenticatedUserRequiredException.class, () -> useCase.execute(null));
     }
 
     @Test

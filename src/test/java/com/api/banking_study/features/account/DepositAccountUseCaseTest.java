@@ -63,10 +63,10 @@ public class DepositAccountUseCaseTest {
     }
 
     @Test
-    public void shouldThrowIllegalArgumentExceptionWhenAccountNotFound(){
+    public void shouldThrowAccountNotFoundExceptionWhenAccountNotFound(){
         Mockito.when(repository.findByUserId(userIdNotExists)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> useCase.execute(userIdNotExists, amount, description));
+        Assertions.assertThrows(AccountNotFoundException.class, () -> useCase.execute(userIdNotExists, amount, description));
         Mockito.verify(transactionRepository, Mockito.never()).save(Mockito.any(TransactionEntity.class));
     }
 
