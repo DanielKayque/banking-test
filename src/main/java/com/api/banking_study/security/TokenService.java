@@ -9,34 +9,43 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(UserEntity entity) {
+    @Value("${auth.jwt.access-token-expiration-seconds:900}")
+    private long accessTokenExpirationSeconds;
+
+    public String generateAccessToken(UserEntity entity) {
+        return generateAccessToken(entity.getEmail());
+    }
+
+    public String generateAccessToken(String subject) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
+            Instant now = Instant.now();
 
             return JWT.create()
                     .withIssuer("auth-login")
-                    .withSubject(entity.getEmail())
-                    .withExpiresAt(getExpirationDate())
+                    .withSubject(subject)
+                    .withClaim("token_use", "access")
+                    .withIssuedAt(now)
+                    .withExpiresAt(getAccessTokenExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Failed to create token");
         }
     }
 
-    public String validateToken(String token) {
+    public String validateAccessToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             return JWT.require(algorithm)
                     .withIssuer("auth-login")
+                    .withClaim("token_use", "access")
                     .build()
                     .verify(token)
                     .getSubject();
@@ -45,7 +54,7 @@ public class TokenService {
         }
     }
 
-    public Instant getExpirationDate(){
-        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.ofHours(-3));
+    public Instant getAccessTokenExpirationDate(){
+        return Instant.now().plusSeconds(accessTokenExpirationSeconds);
     }
 }

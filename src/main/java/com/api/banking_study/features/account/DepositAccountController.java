@@ -1,6 +1,7 @@
 package com.api.banking_study.features.account;
 
 import com.api.banking_study.entities.UserEntity;
+import com.api.banking_study.exceptions.AuthenticatedUserRequiredException;
 import com.api.banking_study.exceptions.ErrorResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,6 +40,10 @@ public class DepositAccountController {
     public ResponseEntity<AccountResponseDto> deposit(@AuthenticationPrincipal UserEntity user,
                                                       @Parameter(description = "Valor a ser depositado")
                                                       @RequestBody @Valid DepositRequestDto dto){
+
+        if (user == null) {
+            throw new AuthenticatedUserRequiredException("Authenticated user is required");
+        }
 
         BigDecimal amount = useCase.execute(user.getId(), dto.amount(), dto.description());
 

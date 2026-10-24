@@ -1,10 +1,11 @@
 package com.api.banking_study.features.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.Instant;
 
 public record LoginResponseDto(
-        @Schema(description = "Token JWT de acesso") String token,
-        @Schema(description = "Tipo do token", example = "Bearer") String type,
-        @Schema(description = "Data e hora de expiração do token", example = "2026-10-12T22:00:00Z") Instant expiresIn) {
+        @Schema(description = "JWT de curta duração para acessar endpoints protegidos") String accessToken,
+        @Schema(description = "Token opaco para renovar a sessão") String refreshToken,
+        @Schema(description = "Tipo do access token", example = "Bearer") String tokenType,
+        @Schema(description = "Validade do access token em segundos", example = "900") long expiresIn,
+        @Schema(description = "Validade do refresh token em segundos", example = "2592000") long refreshExpiresIn) {
 }

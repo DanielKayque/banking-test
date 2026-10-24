@@ -17,7 +17,7 @@ public class CheckBalanceUseCase {
 
     @Transactional
     public CheckBalanceResponseDto execute(UUID userId) {
-        AccountEntity account = repository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("Account not found"));
+        AccountEntity account = repository.findByUserId(userId).orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
         return new CheckBalanceResponseDto(BigDecimal.valueOf(account.getAmountCent(), 2));
     }

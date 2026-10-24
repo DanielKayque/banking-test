@@ -1,5 +1,8 @@
 package com.api.banking_study.entities;
 
+import com.api.banking_study.exceptions.InsufficientFundsException;
+import com.api.banking_study.exceptions.InvalidAmountException;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,9 +32,9 @@ public class AccountEntity {
     }
 
     public Long withdraw(Long amount){
-        if (amount == null || amount <= 0 ) throw new IllegalArgumentException("Invalid amount");
+        if (amount == null || amount <= 0 ) throw new InvalidAmountException("Amount must be greater than zero");
 
-        if (this.amountCent < amount) throw new IllegalArgumentException("Insufficient funds");
+        if (this.amountCent < amount) throw new InsufficientFundsException("Insufficient funds");
 
         this.amountCent -= amount;
 
@@ -39,7 +42,7 @@ public class AccountEntity {
     }
 
     public Long deposit(Long amount){
-        if (amount == null || amount <= 0 ) throw new IllegalArgumentException("Invalid amount");
+        if (amount == null || amount <= 0 ) throw new InvalidAmountException("Amount must be greater than zero");
 
         this.amountCent += amount;
 

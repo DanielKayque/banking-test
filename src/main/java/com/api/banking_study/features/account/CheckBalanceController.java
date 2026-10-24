@@ -2,6 +2,7 @@ package com.api.banking_study.features.account;
 
 import com.api.banking_study.entities.UserEntity;
 import com.api.banking_study.exceptions.ErrorResponseDTO;
+import com.api.banking_study.exceptions.AuthenticatedUserRequiredException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +37,7 @@ public class CheckBalanceController {
     @GetMapping
     public ResponseEntity<CheckBalanceResponseDto> checkBalance(@AuthenticationPrincipal UserEntity user){
         if (user == null) {
-            throw new IllegalArgumentException("Authenticated user is required");
+            throw new AuthenticatedUserRequiredException("Authenticated user is required");
         }
 
         CheckBalanceResponseDto balance = usecase.execute(user.getId());
