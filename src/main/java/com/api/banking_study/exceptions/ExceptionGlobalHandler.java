@@ -3,6 +3,7 @@ package com.api.banking_study.exceptions;
 import com.api.banking_study.features.account.AccountAlreadyExistsException;
 import com.api.banking_study.features.account.AccountNotFoundException;
 import com.api.banking_study.features.user.UserAlreadyRegisteredException;
+import com.api.banking_study.features.user.InvalidRefreshTokenException;
 import com.api.banking_study.features.user.UserNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,12 @@ public class ExceptionGlobalHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponseDTO> handleBadCredentialsException(BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponseDTO(HttpStatus.UNAUTHORIZED.value(), "Usuário ou senha inválidos."));
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidRefreshToken(InvalidRefreshTokenException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponseDTO(HttpStatus.UNAUTHORIZED.value(), "Refresh token inválido, expirado ou revogado."));
     }
 
     @ExceptionHandler(AccountNotFoundException.class)
