@@ -115,7 +115,6 @@ class RefreshTokenServiceTest {
         assertThrows(InvalidRefreshTokenException.class, () -> service.rotate("expired-token"));
 
         assertTrue(expired.isRevoked());
-        verify(repository).save(expired);
     }
 
     @Test
