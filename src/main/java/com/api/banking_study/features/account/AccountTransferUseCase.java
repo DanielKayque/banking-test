@@ -25,9 +25,6 @@ public class AccountTransferUseCase {
     private AccountRepository repository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private TransactionRepository transactionRepository;
 
     @Transactional()

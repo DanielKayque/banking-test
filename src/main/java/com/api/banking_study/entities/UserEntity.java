@@ -2,6 +2,7 @@ package com.api.banking_study.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class UserEntity implements UserDetails {
 
     @Id

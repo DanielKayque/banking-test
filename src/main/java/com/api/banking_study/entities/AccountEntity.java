@@ -5,6 +5,7 @@ import com.api.banking_study.exceptions.InvalidAmountException;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "account")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 public class AccountEntity {
     @Id
     private UUID id;
