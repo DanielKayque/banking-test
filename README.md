@@ -1,167 +1,176 @@
 # Banking API
 
-Projeto backend de uma aplicação bancária desenvolvido com **Java 21 e Spring Boot**, com foco na prática de conceitos modernos de desenvolvimento backend, como APIs REST, autenticação, persistência de dados, migrations, validações e organização da aplicação.
+API REST de uma aplicação bancária de estudos, desenvolvida com Java 21 e Spring Boot. O projeto pratica autenticação, persistência relacional, operações de conta e testes automatizados. Não é destinado a movimentar dinheiro real.
 
-> 🚧 **Projeto em desenvolvimento**
->
-> Este projeto está em constante evolução. Funcionalidades, regras de negócio, endpoints e decisões arquiteturais podem sofrer alterações ao longo do desenvolvimento.
+> Projeto em desenvolvimento. O roadmap e as regras de negócio podem mudar conforme novas funcionalidades forem implementadas.
 
-## Sobre o projeto
+## Funcionalidades implementadas
 
-A Banking API é um projeto pessoal criado com o objetivo de simular algumas das principais responsabilidades de um sistema bancário.
+- Cadastro de usuário com senha armazenada usando BCrypt;
+- Login com access token JWT e refresh token;
+- Rotação de refresh tokens, detecção de reutilização e logout;
+- Criação de uma conta por usuário, iniciada com saldo zero;
+- Consulta do saldo da conta autenticada;
+- Depósito e transferência entre contas, com registros no histórico;
+- Consulta paginada do histórico de transações;
+- PostgreSQL com migrations Flyway;
+- Documentação OpenAPI/Swagger.
 
-O projeto foi desenvolvido principalmente para consolidar conhecimentos no ecossistema Java e aplicar conceitos comuns em aplicações backend reais, com foco em:
+O saque como operação própria ainda não está implementado. Consulte [BANKING_ROADMAP.md](BANKING_ROADMAP.md) para o estado detalhado e os próximos passos.
 
-- organização de responsabilidades;
-- segurança;
-- persistência de dados;
-- regras de negócio;
-- boas práticas de desenvolvimento;
-- testes automatizados;
-- evolução incremental da arquitetura.
+## Tecnologias
 
-Novas funcionalidades e melhorias são adicionadas conforme o projeto avança.
-
-## Tecnologias utilizadas
-
-- **Java 21**
-- **Spring Boot 4**
-- **Spring Web MVC**
-- **Spring Data JPA**
-- **Spring Security**
-- **Bean Validation**
-- **PostgreSQL**
-- **Flyway**
-- **JWT**
-- **Docker Compose**
-- **Gradle**
-- **Lombok**
-- **JUnit**
-
-## Conceitos aplicados
-
-Este projeto também serve como ambiente de prática para conceitos importantes de desenvolvimento backend, como:
-
-- Desenvolvimento de APIs REST
-- Autenticação e autorização
-- Segurança baseada em JWT
-- Persistência de dados com JPA/Hibernate
-- Migrations de banco de dados com Flyway
-- Uso de DTOs
-- Validação de dados
-- Tratamento global de exceções
-- Injeção de dependências
-- Separação entre regras de negócio e infraestrutura
-- Configuração por variáveis de ambiente
-- Banco de dados executado com Docker
-- Testes unitários e de integração
-
-## Estrutura do projeto
-
-A aplicação busca manter uma organização que facilite a separação entre regras de negócio, infraestrutura e responsabilidades da aplicação.
-
-```text
-src/
-├── main/
-│   ├── java/
-│   │   └── com/api/
-│   │       └── ...
-│   │
-│   └── resources/
-│       ├── db/
-│       │   └── migration/
-│       └── ...
-│
-└── test/
-    └── java/
-```
-
-Como o projeto ainda está em desenvolvimento, a estrutura interna e a organização dos pacotes podem ser refatoradas futuramente.
-
-## Banco de dados
-
-O projeto utiliza **PostgreSQL** como banco de dados relacional.
-
-As alterações na estrutura do banco são gerenciadas com **Flyway**, permitindo que o schema seja versionado e evolua de forma controlada.
-
-O ambiente de desenvolvimento também utiliza **Docker Compose** para facilitar a execução do PostgreSQL localmente.
-
-## Segurança
-
-A aplicação utiliza **Spring Security** e autenticação baseada em **JWT**.
-
-A camada de segurança é responsável por controlar o acesso aos recursos da API e permitir a evolução futura de regras de autorização baseadas em usuários e permissões.
-
-As funcionalidades relacionadas à segurança ainda estão sendo aprimoradas conforme o desenvolvimento do projeto avança.
-
-## Variáveis de ambiente
-
-Crie um arquivo `.env` baseado no arquivo `.env.example` disponível no projeto.
-
-Exemplo:
-
-```env
-JWT_SECRET=change-me
-
-DB_NAME=mydatabase
-DB_URL=jdbc:postgresql://localhost:5432/mydatabase
-DB_USERNAME=myuser
-DB_PASSWORD=change-me
-```
-
-Nunca envie credenciais reais ou segredos de produção para o repositório.
-
-## Executando o projeto
-
-### Requisitos
-
-Tenha instalado:
-
-- Java 21+
-- Docker
+- Java 21
+- Spring Boot 4
+- Spring Web MVC, Spring Data JPA e Spring Security
+- Bean Validation
+- PostgreSQL e Flyway
+- JWT (java-jwt)
+- Gradle Wrapper
 - Docker Compose
+- JUnit e Mockito
+- Lombok
 
-O projeto já possui o **Gradle Wrapper**, portanto não é necessário instalar o Gradle globalmente.
+## Requisitos
 
-### Clone o repositório
+- JDK 21 ou superior
+- Docker com Docker Compose
+
+O repositório inclui o Gradle Wrapper, então não é necessário instalar o Gradle globalmente.
+
+## Configuração local
+
+Clone o repositório e entre na pasta do projeto:
 
 ```bash
 git clone https://github.com/DanielKayque/banking-test.git
-
 cd banking-test
 ```
 
-### Configure as variáveis de ambiente
-
-Crie o arquivo `.env` com base no exemplo:
+Crie um arquivo `.env` baseado no exemplo incluído:
 
 ```bash
 cp .env.example .env
 ```
 
-Depois, ajuste as variáveis de acordo com o seu ambiente local.
+No Windows PowerShell, use `Copy-Item .env.example .env`.
 
-### Inicie o PostgreSQL
+Configure as variáveis no `.env`:
+
+```env
+JWT_SECRET=troque-por-um-segredo-local
+DB_NAME=mydatabase
+DB_URL=jdbc:postgresql://localhost:5432/mydatabase
+DB_USERNAME=myuser
+DB_PASSWORD=troque-esta-senha
+JWT_ACCESS_TOKEN_EXPIRATION_SECONDS=900
+JWT_REFRESH_TOKEN_EXPIRATION_SECONDS=2592000
+```
+
+`JWT_ACCESS_TOKEN_EXPIRATION_SECONDS` e `JWT_REFRESH_TOKEN_EXPIRATION_SECONDS` são opcionais; os valores acima correspondem aos padrões da aplicação. Use segredos próprios no ambiente local e nunca coloque credenciais reais no repositório.
+
+Suba o PostgreSQL:
 
 ```bash
 docker compose up -d
 ```
 
-### Execute a aplicação
-
-Linux/macOS:
+Inicie a aplicação:
 
 ```bash
 ./gradlew bootRun
 ```
 
-Windows:
+No Windows:
 
-```bash
+```powershell
 gradlew.bat bootRun
 ```
 
-## Executando os testes
+O servidor Spring Boot usa a porta `8080` por padrão. As migrations do Flyway são aplicadas durante a inicialização.
+
+## Documentação da API
+
+Com a aplicação em execução, acesse o Swagger UI em [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html). A especificação OpenAPI fica em [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs).
+
+Os endpoints de autenticação são públicos. Os endpoints de conta e transações exigem o access token JWT no cabeçalho:
+
+```http
+Authorization: Bearer <accessToken>
+```
+
+### Autenticação
+
+| Método | Endpoint | Descrição |
+| --- | --- | --- |
+| `POST` | `/auth/register` | Cadastra um usuário; responde `201` |
+| `POST` | `/auth/login` | Autentica e retorna access e refresh tokens |
+| `POST` | `/auth/refresh` | Revoga o refresh token usado e retorna um novo par de tokens |
+| `POST` | `/auth/logout` | Revoga o refresh token; responde `204` |
+
+Exemplo de cadastro:
+
+```json
+{
+  "username": "Maria Silva",
+  "email": "maria.silva@example.com",
+  "password": "Senha@123",
+  "document": "12345678901"
+}
+```
+
+Exemplo de login:
+
+```json
+{
+  "email": "maria.silva@example.com",
+  "password": "Senha@123"
+}
+```
+
+O login retorna `accessToken`, `refreshToken`, `tokenType`, `expiresIn` e `refreshExpiresIn`. O refresh token deve ser enviado no corpo das requisições de renovação e logout:
+
+```json
+{
+  "refreshToken": "<refreshToken>"
+}
+```
+
+O logout invalida o refresh token. O access token emitido anteriormente permanece válido até expirar.
+
+### Conta e transações
+
+| Método | Endpoint | Descrição |
+| --- | --- | --- |
+| `POST` | `/account` | Cria a conta do usuário autenticado, com saldo inicial zero; responde `201` |
+| `GET` | `/account/me` | Consulta o saldo da conta autenticada |
+| `POST` | `/account/deposit` | Deposita na conta autenticada |
+| `POST` | `/account/transfer` | Transfere para uma conta identificada pelo documento de destino |
+| `GET` | `/transactions?page=0&size=10` | Lista o histórico paginado da conta autenticada |
+
+Exemplo de depósito:
+
+```json
+{
+  "amount": 100.00,
+  "description": "Depósito de teste"
+}
+```
+
+Exemplo de transferência:
+
+```json
+{
+  "documentDestination": "98765432100",
+  "amount": 25.50
+}
+```
+
+Os valores monetários são representados em reais na API e armazenados em centavos. Como uma conta nova começa com saldo zero, faça um depósito antes de tentar transferir.
+
+O histórico aceita `page` (começa em zero) e `size` (tamanho da página). Os resultados são ordenados do mais recente para o mais antigo. Transferências aparecem usando os tipos genéricos `WITHDRAW` e `DEPOSIT`.
+
+## Executar os testes
 
 Linux/macOS:
 
@@ -171,55 +180,30 @@ Linux/macOS:
 
 Windows:
 
-```bash
+```powershell
 gradlew.bat test
 ```
 
-## Status atual
+## Estrutura
 
-O projeto ainda está em desenvolvimento.
+```text
+src/
+├── main/
+│   ├── java/com/api/banking_study/
+│   │   ├── config/       # Configurações da aplicação e OpenAPI
+│   │   ├── entities/     # Entidades JPA
+│   │   ├── exceptions/   # Exceções e tratamento global
+│   │   ├── features/     # Fluxos de usuário, conta e transações
+│   │   ├── repository/   # Repositórios Spring Data
+│   │   └── security/     # JWT e configuração de segurança
+│   └── resources/db/migration/ # Migrations Flyway
+└── test/                 # Testes automatizados
+```
 
-Entre os pontos que estão sendo implementados ou aprimorados estão:
+## Roadmap
 
-- Regras de negócio bancárias
-- Gerenciamento de contas
-- Autenticação e autorização
-- Validação de dados
-- Tratamento de exceções
-- Modelagem do banco de dados
-- Testes automatizados
-- Regras de segurança
-- Organização da arquitetura da aplicação
-
-## Próximos passos
-
-Algumas melhorias planejadas:
-
-- [ ] Expandir as operações bancárias
-- [ ] Aprimorar autenticação e autorização
-- [ ] Aumentar a cobertura de testes unitários e de integração
-- [ ] Melhorar validações de domínio
-- [ ] Adicionar documentação da API
-- [ ] Padronizar respostas de erro
-- [ ] Evoluir a arquitetura da aplicação
-- [ ] Implementar regras bancárias mais próximas de cenários reais
-- [ ] Melhorar o ambiente local com Docker
-- [ ] Preparar a aplicação para um ambiente semelhante ao de produção
-
-## Objetivo
-
-Este repositório é principalmente um **projeto de estudos e portfólio**.
-
-Seu objetivo é demonstrar a evolução dos meus conhecimentos em desenvolvimento backend utilizando **Java, Spring Boot, PostgreSQL e tecnologias relacionadas**, aplicando conceitos encontrados em aplicações reais.
-
-O projeto continuará evoluindo conforme novos conhecimentos, padrões arquiteturais e funcionalidades forem estudados e implementados.
+Entre os próximos passos estão implementar saque, reforçar os testes de concorrência e rollback, adicionar idempotência para transferências e incluir filtros no extrato. O [roadmap completo](BANKING_ROADMAP.md) mantém o acompanhamento atualizado.
 
 ## Autor
 
-**Daniel Kayque**
-
-GitHub: [DanielKayque](https://github.com/DanielKayque)
-
----
-
-Projeto em desenvolvimento e sujeito a melhorias contínuas.
+**Daniel Kayque** · [GitHub](https://github.com/DanielKayque)
